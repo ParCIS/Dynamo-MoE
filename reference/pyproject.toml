@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dynamo-moe"
+version = "0.1.0"
+description = "Device-independent Dynamo-MoE prefill and decode logic"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+dependencies = ["numpy>=1.24,<3"]
+
+[tool.setuptools.packages.find]
+include = ["dynamo_moe*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

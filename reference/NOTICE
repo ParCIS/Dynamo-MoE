@@ -1,0 +1,12 @@
+Dynamo-MoE prefill and decode logic
+
+The prefill scheduling algorithm is refactored from the supplied Dynamo-MoE
+modifications to vLLM. The supplied source files carry the following notice:
+
+    Copyright contributors to the vLLM project
+    SPDX-License-Identifier: Apache-2.0
+
+The reference describes methods from:
+Jiahao Chen, Shigang Li, Rongtian Fu, Tong Wu, Zhi Ma, and Jingkun Dong.
+Dynamo-MoE: Accelerating Sparse Large Model Inference with Dynamic Parallelization.
+HPDC 2026. DOI: 10.1145/3806645.3807820.

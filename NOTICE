@@ -1,0 +1,20 @@
+Dynamo-MoE
+
+This source tree retains the vLLM runtime, model adapters and native kernels
+from the supplied source baseline, vLLM 0.10.0, upstream commit
+6d8d0a24c02bfd84d46b3016b865a44f048ae84b.
+
+Copyright contributors to the vLLM project.
+Licensed under the Apache License, Version 2.0; see LICENSE.
+Existing third-party notices in individual source files remain applicable.
+
+The Dynamo-MoE extensions consolidate and revise the supplied prefill and
+decodes modifications. Changed integration points are DefaultModelLoader,
+FusedMoE, GPUModelRunner, DeepseekV2MoE and RequestLogger. Scheduling,
+checkpoint transfers, and EP/TP transitions are separated into vllm/dynamo_moe.
+The standalone numerical reference is in reference/dynamo_moe.
+
+Associated paper:
+Jiahao Chen, Shigang Li, Rongtian Fu, Tong Wu, Zhi Ma, and Jingkun Dong.
+Dynamo-MoE: Accelerating Sparse Large Model Inference with Dynamic Parallelization.
+HPDC 2026. DOI: 10.1145/3806645.3807820.

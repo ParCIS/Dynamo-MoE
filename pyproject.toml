@@ -1,0 +1,50 @@
+[build-system]
+# Should be mirrored in requirements/build.txt
+requires = [
+    "cmake>=3.26.1",
+    "ninja",
+    "packaging>=24.2",
+    "setuptools>=77.0.3,<80.0.0",
+    "setuptools-scm>=8.0",
+    "torch == 2.7.1",
+    "wheel",
+    "jinja2",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vllm"
+authors = [{name = "vLLM Team"}]
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+readme = "README.md"
+description = "Dynamo-MoE: dynamic MoE inference on the vLLM runtime"
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+requires-python = ">=3.10,<3.13"
+dynamic = [ "version", "dependencies", "optional-dependencies"]
+
+[project.urls]
+Paper="https://doi.org/10.1145/3806645.3807820"
+Upstream="https://github.com/vllm-project/vllm"
+
+[project.scripts]
+vllm = "vllm.entrypoints.cli.main:main"
+
+[project.entry-points."vllm.general_plugins"]
+lora_filesystem_resolver = "vllm.plugins.lora_resolvers.filesystem_resolver:register_filesystem_resolver"
+
+[tool.setuptools_scm]
+fallback_version = "0.10.0+dynamomoe"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["vllm*"]
