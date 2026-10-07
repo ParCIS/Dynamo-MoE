@@ -18,6 +18,12 @@ Inference also presents different demands across its two phases. Prefill process
 
 Dynamo-MoE addresses these challenges through two complementary mechanisms: token-level load balancing during prefill and adaptive parallelization during decode.
 
+<p align="center">
+  <img src="assets/figures/architecture.png" alt="Dynamo-MoE architecture with an inference plane, a switching plane, and a host expert pool" width="620">
+</p>
+
+**[Figure 7 from the paper](https://doi.org/10.1145/3806645.3807820).** The inference plane balances expert workloads, while the switching plane coordinates layer-by-layer transitions between TP and EP.
+
 | Scenario | Challenge | Approach |
 | --- | --- | --- |
 | Prefill | Skewed expert activation creates uneven device workloads | Token-level workload allocation and on-demand expert loading |
@@ -47,17 +53,6 @@ Transitions proceed layer by layer. A layer adopts its new parallelization strat
 
 The paper organizes the system into an inference plane (I-Plane) and a switching plane (S-Plane). The inference plane executes requests and balances prefill workloads. The switching plane monitors demand and coordinates layer-by-layer changes to decode parallelization.
 
-```mermaid
-flowchart LR
-    Requests[Inference requests] --> I[Inference plane: I-Plane]
-    I --> P[Prefill: balanced EP]
-    I --> D[Decode: adaptive TP / EP]
-    Rate[Global request rate] --> S[Switching plane: S-Plane]
-    S -->|Layer-by-layer transitions| D
-    Pool[Host expert pool] -->|On-demand loading| P
-    Pool -->|Parameter redistribution| D
-```
-
 These optimizations focus on MoE expert computation. They are orthogonal to attention parallelization and KV cache transfer between prefill and decode, and can complement architectures that separate the two inference phases.
 
 ## Results
@@ -65,6 +60,28 @@ These optimizations focus on MoE expert computation. They are orthogonal to atte
 Across the models, hardware, and workloads evaluated in the paper, Dynamo-MoE reports up to **6.75× speedup in time to first token, 1.59× speedup in time per output token, and 1.5× throughput** compared with vLLM baselines with or without expert parallel load balancing (EPLB). The maximum gains for each metric correspond to the experimental conditions reported in the paper.
 
 The central contribution is to connect observed token workloads, expert computation placement, and parallelization policy, while coordinating communication and computation to reduce the cost of adaptation.
+
+### Single-Node Serving Performance
+
+![Single-node comparison of TTFT, TPOT, and throughput across request rates for DeepSeek-V2-Lite and Qwen3-30B-A3B](assets/figures/results-single-node.png)
+
+**[Figure 10 from the paper](https://doi.org/10.1145/3806645.3807820).** One node with eight NVIDIA A800 GPUs: four for prefill and four for decode (4P4D). The comparison covers DeepSeek-V2-Lite and Qwen3-30B-A3B on ShareGPT and ChatAlpaca-20K. Lower TTFT and TPOT are better; higher throughput is better.
+
+### Two-Node Serving Performance
+
+![Two-node comparison of TTFT, TPOT, and throughput across request rates for DeepSeek-V2-Lite and Qwen3-30B-A3B](assets/figures/results-two-nodes.png)
+
+**[Figure 12 from the paper](https://doi.org/10.1145/3806645.3807820).** Two nodes with sixteen NVIDIA A800 GPUs: eight for prefill and eight for decode (8P8D). The results compare Dynamo-MoE with vLLM baselines with and without EPLB under the larger deployment.
+
+### Adaptation to Changing Request Rates
+
+<p align="center">
+  <img src="assets/figures/adaptive-parallelism.png" alt="TPOT and per-GPU throughput traces comparing static EP, static TP, and Dynamo-MoE under changing workloads" width="560">
+</p>
+
+**[Figure 14 from the paper](https://doi.org/10.1145/3806645.3807820).** A trace of 3,840 requests in the single-node 4P4D setting. From top to bottom, the rows show static EP, static TP, and Dynamo-MoE. The left column shows TPOT, and the right column shows per-GPU generation throughput. Dynamo-MoE changes its parallelization strategy as demand rises and falls.
+
+Figures 7, 10, 12, and 14 are from the paper, copyright 2026 its authors, under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The crops omit surrounding page text; the figure content is unchanged.
 
 ## Citation
 

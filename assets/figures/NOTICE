@@ -1,0 +1,17 @@
+Paper figures
+
+Source: Dynamo-MoE: Accelerating Sparse Large Model Inference with Dynamic Parallelization.
+Authors: Jiahao Chen, Shigang Li, Rongtian Fu, Tong Wu, Zhi Ma, and Jingkun Dong.
+HPDC 2026. https://doi.org/10.1145/3806645.3807820
+Copyright 2026 held by the paper's owner/author(s).
+
+The paper is licensed under the Creative Commons Attribution 4.0 International License:
+https://creativecommons.org/licenses/by/4.0/
+
+architecture.png: Figure 7, PDF page 6.
+results-single-node.png: Figure 10, PDF page 9.
+results-two-nodes.png: Figure 12, PDF page 10.
+adaptive-parallelism.png: Figure 14, PDF page 11.
+
+These PNG files were rendered from the supplied PDF at 300 DPI. Crops remove
+surrounding page content; the figures, axes, legends, and data are unchanged.
